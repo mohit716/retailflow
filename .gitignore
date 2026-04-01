@@ -1,0 +1,16 @@
+# Airflow
+airflow/logs/
+airflow/plugins/
+
+# Data files (too large for GitHub)
+data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# OS
+.DS_Store
+Thumbs.db
