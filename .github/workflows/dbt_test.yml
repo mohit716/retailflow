@@ -1,0 +1,71 @@
+name: dbt Tests
+
+on:
+  push:
+    branches: [main, feature/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: airflow
+          POSTGRES_PASSWORD: airflow
+          POSTGRES_DB: airflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dbt
+        run: pip install dbt-postgres
+
+      - name: Create dbt profiles
+        run: |
+          mkdir -p ~/.dbt
+          cat <<EOF > ~/.dbt/profiles.yml
+          retailflow:
+            target: dev
+            outputs:
+              dev:
+                type: postgres
+                host: localhost
+                port: 5432
+                user: airflow
+                password: airflow
+                dbname: airflow
+                schema: public
+                threads: 1
+          EOF
+
+      - name: Run dbt seed
+        run: |
+          cd dbt/retailflow
+          dbt seed
+
+      - name: Run dbt models
+        run: |
+          cd dbt/retailflow
+          dbt run
+
+      - name: Run dbt tests
+        run: |
+          cd dbt/retailflow
+          dbt test
