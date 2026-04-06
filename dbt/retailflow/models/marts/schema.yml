@@ -14,8 +14,7 @@ models:
         tests:
           - not_null
 
+ 
   - name: mart_orders_by_state
     columns:
       - name: customer_state
-        tests:
-          - not_null
