@@ -2,8 +2,12 @@ select
     order_id,
     customer_id,
     order_status,
-    order_purchase_timestamp::timestamp as ordered_at,
-    order_delivered_customer_date::timestamp as delivered_at,
-    order_estimated_delivery_date::timestamp as estimated_delivery_at
-from raw_orders
+    CAST(order_purchase_timestamp AS TIMESTAMP) as ordered_at,
+    CAST(order_delivered_customer_date AS TIMESTAMP) as delivered_at,
+    CAST(order_estimated_delivery_date AS TIMESTAMP) as estimated_delivery_at
+
+
+from {{ source('raw', 'raw_orders') }}
 where order_id is not null
+
+

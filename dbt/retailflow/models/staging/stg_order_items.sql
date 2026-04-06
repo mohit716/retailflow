@@ -2,7 +2,8 @@ select
     order_id,
     product_id,
     seller_id,
-    price::numeric as price,
-    freight_value::numeric as freight_value
-from raw_order_items
+    CAST(price AS NUMERIC) as price,
+    CAST(freight_value AS NUMERIC) as freight_value
+from {{ source('raw', 'raw_order_items') }}
 where order_id is not null
+
