@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_orders
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_monthly_revenue
+    columns:
+      - name: month
+        tests:
+          - not_null
+
+  - name: mart_orders_by_state
+    columns:
+      - name: customer_state
+        tests:
+          - not_null
