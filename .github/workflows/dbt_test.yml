@@ -55,10 +55,10 @@ jobs:
                 threads: 1
           EOF
 
-      - name: Load seed data
+      - name: Run dbt seed
         run: |
-          pip install psycopg2-binary pandas
-          python airflow/dags/load_olist.py
+          cd dbt/retailflow
+          dbt seed
 
       - name: Run dbt models
         run: |
